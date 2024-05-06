@@ -1,0 +1,43 @@
+.top-bar {
+  padding-block: 24px;
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  transition: #{$effectDuration};
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @include onTablet {
+    padding-block: 32px;
+  }
+
+  &__background {
+    position: absolute;
+    left: -400px;
+    height: 100%;
+    width: 200vw;
+    background-color: #f9f9f9;
+  }
+
+  &__icons {
+    display: flex;
+    gap: 24px;
+    z-index: 1;
+  }
+
+  &__logo {
+    display: flex;
+    z-index: 1;
+
+    @include hover(transform, scale(110%));
+
+    @include  onTablet {
+      width: 228px;
+      height: 24px;
+    }
+  }
+}
