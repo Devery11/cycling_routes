@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/cycling_routes/static/css/main.775d4ed8.css",
+    "main.js": "/cycling_routes/static/js/main.2051c919.js",
+    "static/media/header-bg.jpg": "/cycling_routes/static/media/header-bg.36a1404e841ecb742578.jpg",
+    "static/media/about-us-photo.png": "/cycling_routes/static/media/about-us-photo.eb8cab0d06628e525b3c.png",
+    "static/media/logo.png": "/cycling_routes/static/media/logo.01bd607d9d5fd3aa9c8b.png",
+    "static/media/Icon-Burger-menu-hover.svg": "/cycling_routes/static/media/Icon-Burger-menu-hover.a9b5e8cf7ef50b8429f9.svg",
+    "static/media/icon-close.svg": "/cycling_routes/static/media/icon-close.c5abe012f1a7cfe4ef84.svg",
+    "index.html": "/cycling_routes/index.html",
+    "static/media/icon-burger-menu.svg": "/cycling_routes/static/media/icon-burger-menu.e6aa19360eec88bc7ffe.svg",
+    "static/media/icon-phone.svg": "/cycling_routes/static/media/icon-phone.4b004b16f3a944429155.svg",
+    "main.775d4ed8.css.map": "/cycling_routes/static/css/main.775d4ed8.css.map",
+    "main.2051c919.js.map": "/cycling_routes/static/js/main.2051c919.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.775d4ed8.css",
+    "static/js/main.2051c919.js"
+  ]
+}
