@@ -1,4 +1,4 @@
 import React from "react";
-import {Route} from "../../types/route";
+import {DisasterData} from "../../types/disasterData";
 
-export const ModalContext = React.createContext<Route | null>(null);
+export const ModalContext = React.createContext<DisasterData | null>(null);

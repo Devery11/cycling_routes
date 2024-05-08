@@ -1,39 +1,32 @@
-import React, {useEffect, useRef} from "react";
-import ReactDOM from "react-dom/client";
+import React, {useEffect, memo, useContext} from "react";
+import mapboxGl from 'mapbox-gl';
+import {ModalContext} from "../../Contexts/ModalContext";
 
-import { ArcgisMap } from "@arcgis/map-components-react";
 
-// import defineCustomElements to register custom elements with the custom elements registry
-import { defineCustomElements as defineMapElements } from "@arcgis/map-components/dist/loader";
-import esriConfig from "@arcgis/core/config";
-import MapView from "@arcgis/core/views/MapView";
-import Map from "@arcgis/core/Map"
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 
-export const MapComponent = () => {
-    esriConfig.apiKey = "AAPK4688e2aefb6747c2803905c321a33620SFRYEb7Rkv05a0ukbh6n59t1BQV4k64GHXO42S_PajXiuORlP_4ORs680xI7MLf5";
+export const MapComponent = memo(
+    () => {
+        const disaster = useContext(ModalContext);
 
-    const mapDiv = useRef();
-    const map = useRef();
-    const mapView = useRef();
+        useEffect(() => {
+            console.log(111111111)
+            mapboxGl.accessToken = 'pk.eyJ1IjoiZGV2ZXJ5IiwiYSI6ImNsdnZnc2FkYzFxNHAya3F6bmZxZzl3MjUifQ.W5wvpjd5aC-9xaEkHSh6nA';
+            const map = new mapboxGl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v12',
+                center: [disaster.latlong[1], disaster.latlong[0]],
+                zoom: 9,
+            });
 
-    useEffect(() => {
-        // @ts-ignore
-        map.current = new Map({
-            basemap: 'streets-vector'
-        });
-
-        mapView.current = new MapView({
-            map: map,
-        })
-
-        mapView.current.container = mapDiv.current
-    }, []);
+            const marker = new mapboxGl.Marker({ type: 'point' }).setLngLat([disaster.latlong[1], disaster.latlong[0]]).addTo(map);
+        }, []);
 
 
 
 
-    return (
-        <div className="map" ref={mapDiv} style={{ height: '100%', width: '100%'}}></div>
-    );
-};
+
+        return (
+            <div id='map'></div>
+        );
+    }
+);

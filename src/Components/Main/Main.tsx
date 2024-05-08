@@ -1,46 +1,69 @@
 import React, {useEffect, useState} from "react";
-import {getRoutesFromServer} from "../../api/routes";
-import {Route} from "../../../types/route";
-import {RecommendedRoute} from "../RecommendedRoute/RecommendedRoute";
+import { getDisasters } from "../../api/routes";
+import {Disaster} from "../Disaster/Disaster";
 import {Modal} from "../Modal/Modal";
 import {ModalContext} from "../../Contexts/ModalContext";
+import {DisasterType} from "../../../types/DisasterType";
+import {DisasterData} from "../../../types/disasterData";
+import {Audio} from "react-loader-spinner";
+import classNames from "classnames";
+import {Pagination} from "../Pagination/Pagination";
 
 export const Main:React.FC = () => {
-    const [routesFromServer, setRoutesFromServer] = useState<Route[]>([{
-        title: '',
-        description: '',
-        imagesUrl: [],
-    }]);
-
-    const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
+    const [disastersFromServer, setDisastersFromServer] = useState<DisasterType>({
+        "data": [],
+        "object": '',
+        "totalResults": 0,
+        "hasMore": true,
+        "page": 0,
+    });
+    const [selectedDisaster, setSelectedDisaster] = useState<DisasterData | null>(null);
+    const [page, setPage] = useState(1);
+    const [errorMassage, setErrorMassage] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getRoutesFromServer().then(setRoutesFromServer);
-    }, []);
+        setIsLoading(true);
+
+        getDisasters(page)
+            .then(setDisastersFromServer)
+            .catch(() => {
+                setErrorMassage('Try again later')
+            })
+            .finally(() => setIsLoading(false));
+    }, [page]);
+
+    console.log(123123, selectedDisaster)
 
     return (
         <>
             <ModalContext.Provider
-                value={selectedRoute}
+                value={selectedDisaster}
             >
-                {selectedRoute && (
-                    <Modal handleClose={() => setSelectedRoute(null)} />
+                {selectedDisaster && (
+                    <Modal handleClose={() => setSelectedDisaster(null)} />
                 )}
             </ModalContext.Provider>
             <main className="main">
                 <div className="main__content">
                     <div className="container">
                         <section className="recommended" id="recommended">
-                            <h2 className="section-title">Routes</h2>
+                            <h2 className="section-title">Disasters</h2>
+                            {/*{isLoading && <Audio />}*/}
                             <div className="recommended__products">
-                                {routesFromServer.map(route => (
-                                    <RecommendedRoute
-                                        route={route}
-                                        handleSetSelectedRoute={(newRoute: Route) => setSelectedRoute(newRoute)}
-                                        key={route.title}
-                                    />
-                                ))}
+                                {
+                                    !errorMassage &&
+                                    disastersFromServer.data.map(disaster => (
+                                        <Disaster
+                                            disaster={disaster}
+                                            setSelectedRoute={setSelectedDisaster}
+                                            key={disaster.id}
+                                        />
+                                    ))
+                                }
                             </div>
+
+                            <Pagination page={page} disasters={disastersFromServer} setPage={setPage} />
                         </section>
                     </div>
 
@@ -49,13 +72,10 @@ export const Main:React.FC = () => {
 
                         <div className="container">
                             <div className="about-us__content">
-                                <h2 className="section-title about-us__title">Timeless, for 50 years and counting</h2>
+                                <h2 className="section-title about-us__title">Our website is your guide through natural disasters!</h2>
 
                                 <p className="about-us__description">
-                                    Bang & Olufsen is expanding its Recreated Classics Program with the launch of
-                                    Beosystems – a limited edition music system that transcends time by bridging the gap
-                                    between one of our iconic designs from 1972 and today’s cutting-edge digital
-                                    technology.
+                                    Our website offers in-depth analysis and up-to-date information on various natural disasters around the world. We strive to help our users stay informed and prepared for extreme situations by providing timely warnings, safety tips and survival strategies. Whether it's an earthquake, hurricane, flood or other disasters, our goal is to provide you with the knowledge you need to minimize damage and protect your life and property. Subscribe to our updates to stay one step ahead of nature!
                                 </p>
                             </div>
                         </div>
@@ -106,7 +126,7 @@ export const Main:React.FC = () => {
 
                                     <p className="contact-us__text">
                                         <a href="mailto:hello@bang&olufsen.com"
-                                           className="contact-us__link">hello@bang&olufsen.com</a>
+                                           className="contact-us__link">example@disasters.com</a>
                                     </p>
                                 </div>
                                 <div className="contact-us__info">

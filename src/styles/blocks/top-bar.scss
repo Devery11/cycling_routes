@@ -17,9 +17,8 @@
 
   &__background {
     position: absolute;
-    left: -400px;
-    height: 100%;
-    width: 200vw;
+    height: 96px;
+    width: 100vw;
     background-color: #f9f9f9;
   }
 
@@ -32,6 +31,7 @@
   &__logo {
     display: flex;
     z-index: 1;
+    background-image: url("../images/logo.png");
 
     @include hover(transform, scale(110%));
 

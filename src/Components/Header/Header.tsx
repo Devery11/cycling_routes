@@ -2,12 +2,12 @@ import React from "react";
 
 export const Header:React.FC = () => (
     <header className="header">
+        <div className="top-bar__background"/>
         <div className="container">
             <div className="header__content">
                 <div className="top-bar">
-                    <div className="top-bar__background"/>
                     <a href="#" className="top-bar__logo">
-                        <img src="images/logo.svg" alt="Bang & Olufsen logo"/>
+                        <img src='' alt="Disaster logo"/>
                     </a>
 
                     <div className="top-bar__icons">
@@ -21,9 +21,9 @@ export const Header:React.FC = () => (
 
                 <div className="header__bottom">
                     <h1 className="header__title">
-                        Be healthy.
+                        Disasters
                         <br/>
-                        Be happy.
+                        Base
                     </h1>
                 </div>
             </div>

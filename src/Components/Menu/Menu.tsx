@@ -5,7 +5,7 @@ export const Menu:React.FC = () => (
         <div className="container">
             <div className="top-bar menu__top">
                 <a href="#" className="top-bar__logo">
-                    <img src="images/logo.svg" alt="Bang & Olufsen logo"/>
+                    <img src="../../styles/images/logo.png" alt="Disasters logo"/>
                 </a>
 
                 <a href="#" className="icon icon--close"></a>
@@ -15,11 +15,7 @@ export const Menu:React.FC = () => (
                 <nav className="nav menu__nav">
                     <ul className="nav__list">
                         <li className="nav__item">
-                            <a className="nav__link" href="#recommended">Recommended</a>
-                        </li>
-
-                        <li className="nav__item">
-                            <a className="nav__link" href="#categories">Categories</a>
+                            <a className="nav__link" href="#recommended">Disasters</a>
                         </li>
 
                         <li className="nav__item">
@@ -34,10 +30,6 @@ export const Menu:React.FC = () => (
 
                 <a href="tel:+1 234 5555-55-55" className="menu__phone-number">
                     +1 234 5555-55-55
-                </a>
-
-                <a href="tel:+1 234 5555-55-55" className="menu__call-to-order">
-                    call to order
                 </a>
             </div>
         </div>
