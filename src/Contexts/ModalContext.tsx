@@ -1,4 +1,4 @@
 import React from "react";
-import {DisasterData} from "../../types/disasterData";
+import {Feature} from "../../types/feature";
 
-export const ModalContext = React.createContext<DisasterData | null>(null);
+export const ModalContext = React.createContext<Feature | null>(null);

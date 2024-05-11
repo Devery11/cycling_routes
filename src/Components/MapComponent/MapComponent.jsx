@@ -1,24 +1,54 @@
-import React, {useEffect, memo, useContext} from "react";
-import mapboxGl from 'mapbox-gl';
+import React, {useEffect, memo, useContext, useRef} from "react";
+import Map from '@arcgis/core/Map';
+import MapView from '@arcgis/core/views/MapView';
 import {ModalContext} from "../../Contexts/ModalContext";
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
+import Graphic from "@arcgis/core/Graphic";
 
 
 
 export const MapComponent = memo(
     () => {
         const disaster = useContext(ModalContext);
+        const mapDiv = useRef();
+        const map = useRef();
+        const mapView = useRef();
+        const graphicLayer = useRef();
+        const pointGraphic = useRef();
 
         useEffect(() => {
-            console.log(111111111)
-            mapboxGl.accessToken = 'pk.eyJ1IjoiZGV2ZXJ5IiwiYSI6ImNsdnZnc2FkYzFxNHAya3F6bmZxZzl3MjUifQ.W5wvpjd5aC-9xaEkHSh6nA';
-            const map = new mapboxGl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v12',
-                center: [disaster.latlong[1], disaster.latlong[0]],
-                zoom: 9,
+            map.current = new Map({
+               basemap: 'streets-vector',
             });
 
-            const marker = new mapboxGl.Marker({ type: 'point' }).setLngLat([disaster.latlong[1], disaster.latlong[0]]).addTo(map);
+            mapView.current = new MapView({
+                map: map.current,
+                center: [Math.round(disaster.geometry.coordinates[0]), Math.round(disaster.geometry.coordinates[1])],
+                zoom: 10,
+            });
+
+            graphicLayer.current = new GraphicsLayer();
+            map.current.add(graphicLayer);
+
+            pointGraphic.current = new Graphic({
+                geometry: {
+                    type: "point",
+                    longitude: Math.round(disaster.geometry.coordinates[0]),
+                    latitude: Math.round(disaster.geometry.coordinates[1]),
+                },
+                symbol: {
+                    type: "simple-marker",
+                    color: [226, 119, 40],  // Orange
+                    outline: {
+                        color: [255, 255, 255], // White
+                        width: 1
+                    }
+                },
+            });
+
+            graphicLayer.current.add(pointGraphic);
+
+            mapView.current.container = mapDiv.current;
         }, []);
 
 
@@ -26,7 +56,15 @@ export const MapComponent = memo(
 
 
         return (
-            <div id='map'></div>
+            <div
+                className="modal__map"
+                ref={mapDiv}
+                style={{
+                    height: '50vh',
+                    width: '70vh',
+                }}
+            >
+            </div>
         );
     }
 );

@@ -1,39 +1,53 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { getDisasters } from "../../api/routes";
 import {Disaster} from "../Disaster/Disaster";
-import {Modal} from "../Modal/Modal";
+import {ModalDisaster} from "../ModalDisaster/ModalDisaster";
 import {ModalContext} from "../../Contexts/ModalContext";
 import {DisasterType} from "../../../types/DisasterType";
-import {DisasterData} from "../../../types/disasterData";
+import {Feature} from "../../../types/feature";
 import {Audio} from "react-loader-spinner";
 import classNames from "classnames";
 import {Pagination} from "../Pagination/Pagination";
+import {useDebounce} from "../../hooks/useDebounce";
+import {FormFilters} from "../FormFilters/FormFilters";
+import {Filters} from "../../../types/Filters";
+import {BarChartMagnitude} from "../BarChartMagnitude/BarChartMagnitude";
 
 export const Main:React.FC = () => {
-    const [disastersFromServer, setDisastersFromServer] = useState<DisasterType>({
-        "data": [],
-        "object": '',
-        "totalResults": 0,
-        "hasMore": true,
-        "page": 0,
-    });
-    const [selectedDisaster, setSelectedDisaster] = useState<DisasterData | null>(null);
+    const [disastersFromServer, setDisastersFromServer] = useState<DisasterType | null>(null);
+    const [disastersToDisplay, setDisastersToDisplay] = useState<Feature[] | null>(null);
+    const [selectedDisaster, setSelectedDisaster] = useState<Feature | null>(null);
     const [page, setPage] = useState(1);
     const [errorMassage, setErrorMassage] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+    const [filters, setFilters] = useState<Filters>({});
+
+    const debouncedSearchValue = useDebounce(searchValue);
+
+    useEffect(() => {
+        setDisastersToDisplay(disastersFromServer ?
+            disastersFromServer.features
+                .filter(feature => feature.properties.title
+                .trim()
+                .toLowerCase()
+                .includes(debouncedSearchValue.trim().toLowerCase())) : []);
+    }, [debouncedSearchValue]);
 
     useEffect(() => {
         setIsLoading(true);
 
-        getDisasters(page)
-            .then(setDisastersFromServer)
+        getDisasters(filters)
+            .then((res) => {
+                setDisastersFromServer(res);
+                setDisastersToDisplay(res.features);
+            })
             .catch(() => {
                 setErrorMassage('Try again later')
             })
             .finally(() => setIsLoading(false));
-    }, [page]);
-
-    console.log(123123, selectedDisaster)
+    }, [page, filters]);
 
     return (
         <>
@@ -41,7 +55,7 @@ export const Main:React.FC = () => {
                 value={selectedDisaster}
             >
                 {selectedDisaster && (
-                    <Modal handleClose={() => setSelectedDisaster(null)} />
+                    <ModalDisaster handleClose={() => setSelectedDisaster(null)} />
                 )}
             </ModalContext.Provider>
             <main className="main">
@@ -49,33 +63,76 @@ export const Main:React.FC = () => {
                     <div className="container">
                         <section className="recommended" id="recommended">
                             <h2 className="section-title">Disasters</h2>
-                            {/*{isLoading && <Audio />}*/}
+                            <div className="recommended__search">
+                                <input
+                                    className="recommended__search-bar"
+                                    value={searchValue}
+                                    onChange={
+                                        (event) => setSearchValue(event.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="Search title"
+                                />
+                                <div>
+                                    <button
+                                        className="button recommended__filters"
+                                        onClick={() => setIsFilterModalOpen(prevState => !prevState)}
+                                    >
+                                        Filters
+                                    </button>
+                                    {isFilterModalOpen && (
+                                        <div className="filters">
+                                            <FormFilters onSubmit={setFilters}/>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            {isLoading && <Audio wrapperClass="loader"/>}
                             <div className="recommended__products">
                                 {
+                                    disastersToDisplay &&
                                     !errorMassage &&
-                                    disastersFromServer.data.map(disaster => (
-                                        <Disaster
-                                            disaster={disaster}
-                                            setSelectedRoute={setSelectedDisaster}
-                                            key={disaster.id}
-                                        />
-                                    ))
+                                    disastersToDisplay
+                                        .slice(24 * (page - 1), 24 * page)
+                                        .map(feature => (
+                                            <Disaster
+                                                disaster={feature}
+                                                setSelectedRoute={setSelectedDisaster}
+                                                key={feature.id}
+                                            />
+                                        ))
                                 }
                             </div>
 
-                            <Pagination page={page} disasters={disastersFromServer} setPage={setPage} />
+                            <Pagination
+                                page={page}
+                                elementCount={disastersToDisplay ? disastersToDisplay.length : 0}
+                                setPage={setPage}
+                            />
                         </section>
                     </div>
+
+                    <section>
+                        <div className="container" >
+                            {disastersToDisplay && <BarChartMagnitude disasters={disastersToDisplay} />}
+                        </div>
+                    </section>
 
                     <section className="about-us" id="about-us">
                         <div className="about-us__photo"></div>
 
                         <div className="container">
                             <div className="about-us__content">
-                                <h2 className="section-title about-us__title">Our website is your guide through natural disasters!</h2>
+                                <h2 className="section-title about-us__title">Our website is your guide through natural
+                                    disasters!</h2>
 
                                 <p className="about-us__description">
-                                    Our website offers in-depth analysis and up-to-date information on various natural disasters around the world. We strive to help our users stay informed and prepared for extreme situations by providing timely warnings, safety tips and survival strategies. Whether it's an earthquake, hurricane, flood or other disasters, our goal is to provide you with the knowledge you need to minimize damage and protect your life and property. Subscribe to our updates to stay one step ahead of nature!
+                                    Our website offers in-depth analysis and up-to-date information on various natural
+                                    disasters around the world. We strive to help our users stay informed and prepared
+                                    for extreme situations by providing timely warnings, safety tips and survival
+                                    strategies. Whether it's an earthquake, hurricane, flood or other disasters, our
+                                    goal is to provide you with the knowledge you need to minimize damage and protect
+                                    your life and property. Subscribe to our updates to stay one step ahead of nature!
                                 </p>
                             </div>
                         </div>

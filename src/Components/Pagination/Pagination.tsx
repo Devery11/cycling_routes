@@ -3,13 +3,13 @@ import React from "react";
 import {DisasterType} from "../../../types/DisasterType";
 
 type Props = {
-    disasters: DisasterType,
+    elementCount: number,
     page: number,
     setPage: React.Dispatch<React.SetStateAction<number>>,
 };
 
-export const Pagination: React.FC<Props> = ({ disasters, page, setPage }) => {
-    const totalPageCount = Math.floor((disasters.totalResults / 25));
+export const Pagination: React.FC<Props> = ({ elementCount, page, setPage }) => {
+    const totalPageCount = Math.ceil((elementCount / 24));
 
   return (
       <div className="pagination">

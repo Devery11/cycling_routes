@@ -6,7 +6,7 @@ type Props = {
     handleClose: () => void;
 };
 
-export const Modal:React.FC<Props> = memo(({ handleClose }) => {
+export const ModalDisaster:React.FC<Props> = memo(({ handleClose }) => {
     const disaster = useContext(ModalContext);
 
     const isFirstRender = useRef(true);
@@ -15,45 +15,62 @@ export const Modal:React.FC<Props> = memo(({ handleClose }) => {
         isFirstRender.current = false;
     }, []);
 
-    console.log(isFirstRender)
+    console.log(disaster)
 
     // @ts-ignore
     return (
         <>
-            <div className="modal" />
+            <div className="modal" onClick={handleClose} />
             <div className="modal__content">
-                <h1 className="modal__title">{disaster?.title}</h1>
+                <h1 className="modal__title">{disaster?.properties.title}</h1>
                 <div className="close-icon" onClick={handleClose} />
                 <div className="route-modal">
                     <div className="route-modal__carusel">
-                        {isFirstRender && (<MapComponent />)}
+                        <MapComponent />
                     </div>
                     <div className="route-modal__description">
                         <table>
                             <tbody>
                             <tr>
-                                <td>GDACS ID:</td>
-                                <td>{disaster?.guid}</td>
+                                <td>Code:</td>
+                                <td>{disaster?.properties.code}</td>
                             </tr>
                             <tr>
                                 <td>Magnitude:</td>
                                 <td>
                                     {
                                         // @ts-ignore
-                                        disaster?.magnitudeValue + disaster?.magnitudeUnit
+                                        (disaster?.properties.mag)?.toFixed(1) + disaster?.properties.magType
                                     }
                                 </td>
                             </tr>
                             <tr>
-                                <td>Lat/Long:</td>
+                                <td>Long/Lat:</td>
                                 <td>
-                                    {(Number(disaster?.latlong[0])).toFixed(2) + ' / ' + (Number(disaster?.latlong[1])).toFixed(2)}
+                                    {(Number(disaster?.geometry.coordinates[0])).toFixed(2) + ' / ' + (Number(disaster?.geometry.coordinates[1])).toFixed(2)}
                                 </td>
                             </tr>
                             <tr>
-                                <td>Description: </td>
+                                <td>Time:</td>
                                 <td>
-                                    {disaster?.description}
+                                    {new Date(disaster?.properties.time ?? 0).toString()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gap:</td>
+                                <td>
+                                    {disaster?.properties.gap ?? 0}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Url:</td>
+                                <td>
+                                    <a
+                                        href={disaster?.properties.url}
+                                        target="_blank"
+                                    >
+                                        {disaster?.properties.url}
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>

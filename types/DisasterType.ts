@@ -1,9 +1,17 @@
-import {DisasterData} from "./disasterData";
+import {Feature} from "./feature";
 
 export type DisasterType = {
-    "data": DisasterData[],
-    "object": string,
-    "totalResults": number,
-    "hasMore": true,
-    "page": number
+    "bbox": number[],
+    "features": Feature[],
+    "metadata": {
+        "generated": number,
+        "url": string,
+        "title": string,
+        "status": number,
+        "api": string,
+        "limit": number,
+        "offset": number,
+        "count": number
+    },
+    "type": string,
 };

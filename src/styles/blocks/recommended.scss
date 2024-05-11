@@ -1,4 +1,5 @@
 .recommended {
+  position: relative;
   &__link {
     text-decoration: none;
     grid-column: 1 / -1;
@@ -27,5 +28,31 @@
 
     @include hover(transform, scale(110%));
 
+  }
+
+  &__search {
+    display: flex;
+    margin-bottom: 24px;
+  }
+
+  &__search-bar {
+    //background-image: url('/css/searchicon.png');
+    background-position: 10px 12px;
+    background-repeat: no-repeat;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    width: 100%;
+    font-size: 20px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    font-family: Manrope, sans-serif;
+  }
+
+  &__filters {
+    border-radius: 0 !important;
+    border-bottom-right-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+    padding-inline: 24px;
   }
 }

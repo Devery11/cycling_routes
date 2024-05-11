@@ -1,0 +1,43 @@
+.filters {
+  z-index: 3;
+  background-color: #fff;
+  position: absolute;
+  right: 0;
+  border: black solid 1px;
+  font-family: Manrope, sans-serif;
+  line-height: 140%;
+  font-size: 16px;
+  border-radius: 8px;
+  padding-inline: 36px;
+  padding-block: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  &__label {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__input {
+    font-family: Manrope, sans-serif;
+    line-height: 140%;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    margin-bottom: 16px;
+    font-size: 20px;
+  }
+
+  &__select {
+    margin-bottom: 8px;
+    font-family: Manrope, sans-serif;
+    line-height: 140%;
+    padding: 4px 8px;
+  }
+}
