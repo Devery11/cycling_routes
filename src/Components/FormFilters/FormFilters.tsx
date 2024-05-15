@@ -51,7 +51,7 @@ export const FormFilters: React.FC<Props> = ({ onSubmit }) => {
                 <input
                     type="number"
                     min="1"
-                    max="10"
+                    max="12"
                     className="form__input"
                     onChange={(event) =>
                         setFilters((prevState) => (

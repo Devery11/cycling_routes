@@ -114,7 +114,7 @@ export const Main:React.FC = () => {
 
                     <section>
                         <div className="container" >
-                            {disastersToDisplay && <BarChartMagnitude disasters={disastersToDisplay} />}
+                            {disastersToDisplay && <BarChartMagnitude disasters={disastersToDisplay.slice(24 * (page - 1), 24 * page)} />}
                         </div>
                     </section>
 
